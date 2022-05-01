@@ -1,4 +1,6 @@
 import pandas as pd
+import matplotlib.pyplot as plt
+import scipy.stats as statss
 
 def load_data(csv):
     df = pd.read_csv(csv)
@@ -16,7 +18,7 @@ def clean_titles(ser1, ser2):
     return ser2
 
 def stats(ser1, ser2, df):
-
+    print()
     ## duration stats
     mean_duration = ser1.mean()
     total_mins_watched = ser1.sum()
@@ -42,10 +44,35 @@ def type_stats(df, str):
     ratio =((type_count/len(df))).round(3)
     ratio_df = pd.DataFrame(ratio)
     print(ratio_df)
-    print()
 
     return ratio_df
 
+def pie_chart(df):
+    colors = ("#cd722d", "#fcd053", "#933639","#D3E19F")
+    wp = { 'linewidth' : 0.75, 'edgecolor' : "black" }
+    explode = (0.05, 0.075, 0.1, 0.25)
 
+    plt.figure(figsize =(10, 9))
+    plt.pie(df["Type"], labels = df.index, colors=colors, wedgeprops=wp, explode=explode)
+    plt.title("Netflix Watch Type Breakdown")
+    plt.tight_layout()
+    plt.show()
 
+def bar_chart(df):
+    sum_dur_list = df.groupby(['Title'], as_index=False)['Duration'].sum()
 
+    plt.figure(figsize =(10, 7))
+    plt.barh(sum_dur_list['Title'], sum_dur_list['Duration'], color='#D3E19F')
+    plt.xlabel("Total Minutes Watched")
+    plt.ylabel("Titles")
+    plt.title("Total Duration for Each Title")
+    plt.tight_layout()
+    plt.show()
+
+def ind_t_test(df1, df2):
+    t_computed, p_value = statss.ttest_ind(df1["Duration"], df2["Duration"])
+    print("t-computed:", t_computed, "\np-value:", p_value/2)
+    if(t_computed < 1.697):
+        print("Decision:", "fail to reject null")
+    if(t_computed > 1.697):
+        print("Decision:", "reject null")
