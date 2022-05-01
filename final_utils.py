@@ -15,12 +15,27 @@ def clean_titles(ser1, ser2):
 
     return ser2
 
-def compute_stats(ser):
-    mean = ser.mean()
-    sum = ser.sum()
-    mode = ser.mode()
+def stats(ser1, ser2, df):
 
-    return  mean, sum, mode
+    ## duration stats
+    mean_duration = ser1.mean()
+    total_mins_watched = ser1.sum()
+    frequent_duration = ser1.mode()
+
+    # release yr stats
+    avg_release_yr = ser2.mean()
+    frequent_release_yr = ser2.mode()
+
+    # total number watched
+    num_watched = len(df)
+
+    # build stats ser
+    stats_list = [mean_duration, frequent_duration[0],frequent_release_yr[0], round(avg_release_yr,3), total_mins_watched, num_watched]
+    stats_index = ["Average Duration", "Most Frequent Duration", "Most Frequent Release Year", "Average Release Year", 
+    "Total Minutes Watched", "Number Watched", ]
+    stats_ser = pd.Series(stats_list, index=stats_index)
+    print(stats_ser)
+    print()
 
 def type_stats(df, str):
     type_count = df.groupby([str])[str].count()
@@ -29,11 +44,8 @@ def type_stats(df, str):
     print(ratio_df)
     print()
 
-def build_stats_ser(stat1, stat2, stat3, stat4, stat5, stat6):
-    stats_list = [stat1, stat3[0], stat5[0], round(stat6,3), stat2, stat4]
-    stats_index = ["Average Duration", "Most Frequent Duration", "Most Frequent Release Year", "Average Release Year", 
-    "Total Minutes Watched", "Number Watched", ]
-    stats_ser = pd.Series(stats_list, index=stats_index)
-    print(stats_ser)
+    return ratio_df
+
+
 
 
