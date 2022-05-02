@@ -1,6 +1,13 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import scipy.stats as statss
+from sklearn.preprocessing import LabelEncoder
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import plot_tree
+from sklearn.metrics import accuracy_score
 
 def load_data(csv):
     df = pd.read_csv(csv)
@@ -98,11 +105,36 @@ def bar_chart(df):
 def ind_t_test(df1, df2):
     t_computed, p_value = statss.ttest_ind(df1["Duration"], df2["Duration"])
     print("t-computed:", t_computed, "\np-value:", p_value/2)
-    if(t_computed < 1.697):
-        print("Decision:", "fail to reject null")
-    if(t_computed > 1.697):
-        print("Decision:", "reject null")
 
 def dep_t_test(df1, df2, str):
     t_computed, p_value = statss.ttest_rel(df1[str], df2[str])
     print("t-computed:", t_computed, "\np-value:", p_value/2)
+
+def label_encoder(df, str):
+    le = LabelEncoder()
+    le.fit(df[str])
+    df[str] = le.transform(df[str])
+
+    # le_name_mapping = dict(zip(le.classes_, le.transform(le.classes_)))
+    # print(le_name_mapping)
+
+def kNN(df, str):
+    X = df.drop(str, axis = 1)
+    y = df[str].copy()
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0)
+
+    knn_clf = KNeighborsClassifier(n_neighbors=3, metric="euclidean")
+    knn_clf.fit(X_train, y_train)
+
+    accuracy = knn_clf.score(X_test, y_test)
+    print("accuracy = ", accuracy)
+
+def tree(df, str):
+    X = df.drop(str, axis = 1)
+    y = df[str].copy()
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0)
+    clf = DecisionTreeClassifier(random_state=0, max_depth=3)
+    clf.fit(X_train, y_train)
+    y_predicted = clf.predict(X_test)
+    accuracy = accuracy_score(y_test, y_predicted)
+    print("accuracy = ", accuracy)
