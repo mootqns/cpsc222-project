@@ -4,9 +4,7 @@ import scipy.stats as statss
 from sklearn.preprocessing import LabelEncoder
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.tree import plot_tree
 from sklearn.metrics import accuracy_score
 
 def load_data(csv):
