@@ -5,7 +5,7 @@ visualizations. Further, I also performed some basic machine learning using kNN 
 instances in my dataset. 
 
 This repository contains the .csv data files I worked with, a .py file for utility code, and a .ipynb file which is the main portion of this project. 
-I hope you enjoy viewing this project, and find some parts of it interesting along the way. 
+I hope you enjoy exploring my work in this project, and find some parts of it interesting along the way. 
 
 Thanks, 
 Matt
